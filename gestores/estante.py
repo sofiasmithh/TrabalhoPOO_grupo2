@@ -1,23 +1,29 @@
 
 from datetime import date
-
 from modelos.leitura import Leitura
 from persistencia.banco_de_dados import BancoDeDados
 
 
 class Estante:
-    STATUS_VALIDOS = ["Quero ler", "Lendo", "Lido", "Abandonado"]
+    STATUS_VALIDOS = Leitura.STATUS_VALIDOS
 
-    def __init__(self, leitor_id, catalogo):
+    def __init__(self, leitor_id, catalogo, banco=None):
         self.__leitor_id = leitor_id
         self.__catalogo = catalogo
-        self.__banco = BancoDeDados()
+
+        if banco is None:
+            self.__banco = BancoDeDados()
+        else:
+            self.__banco = banco
+
         self.__leituras = []
         self.__meta_anual = 0
-
         self.carregar_estante()
 
     def carregar_estante(self):
+        self.__leituras = []
+        self.__meta_anual = 0
+
         dados = self.__banco.carregar_leituras()
 
         for registro in dados:
@@ -25,23 +31,30 @@ class Estante:
                 continue
 
             if registro.get("tipo") == "meta":
-                self.__meta_anual = registro["meta_anual"]
+                self.__meta_anual = int(
+                    registro.get("meta_anual", 0)
+                )
 
             elif registro.get("tipo") == "leitura":
-                self.__leituras.append(Leitura.from_dict(registro))
+                livro = self.__catalogo.buscar_por_id(
+                    int(registro["livro_id"])
+                )
+
+                if livro is not None:
+                    leitura = Leitura.from_dict(registro, livro)
+                    self.__leituras.append(leitura)
 
     def salvar_estante(self):
         dados = self.__banco.carregar_leituras()
 
+        # Mantém os registros dos outros leitores.
         dados = [
             registro for registro in dados
             if registro.get("leitor_id") != self.__leitor_id
         ]
 
         for leitura in self.__leituras:
-            registro = leitura.to_dict()
-            registro["tipo"] = "leitura"
-            dados.append(registro)
+            dados.append(leitura.to_dict(self.__leitor_id))
 
         dados.append({
             "tipo": "meta",
@@ -51,22 +64,20 @@ class Estante:
 
         self.__banco.salvar_leituras(dados)
 
-    def adicionar_leitura(self, livro_id, status):
+    def adicionar_leitura(self, livro_id, status="Quero ler"):
         if status not in self.STATUS_VALIDOS:
             raise ValueError("Status inválido.")
 
-        if self.__catalogo.buscar_por_id(livro_id) is None:
+        livro = self.__catalogo.buscar_por_id(livro_id)
+
+        if livro is None:
             raise ValueError("Livro não encontrado no catálogo.")
 
         for leitura in self.__leituras:
             if leitura.livro_id == livro_id:
                 raise ValueError("Livro já está na estante.")
 
-        leitura = Leitura(self.__leitor_id, livro_id, status)
-
-        if status == "Lido":
-            leitura.data_conclusao = date.today().isoformat()
-
+        leitura = Leitura(livro, status)
         self.__leituras.append(leitura)
         self.salvar_estante()
 
@@ -118,10 +129,11 @@ class Estante:
         if (
             not isinstance(avaliacao, int)
             or isinstance(avaliacao, bool)
-            or avaliacao < 1
-            or avaliacao > 5
+            or not 1 <= avaliacao <= 5
         ):
-            raise ValueError("A avaliação deve ser de 1 a 5.")
+            raise ValueError(
+                "A avaliação deve ser um número inteiro de 1 a 5."
+            )
 
         leitura = self.buscar_leitura(livro_id)
         leitura.avaliacao = avaliacao
@@ -135,24 +147,31 @@ class Estante:
         return leitura.favorito
 
     def definir_meta_anual(self, meta):
-        if not isinstance(meta, int) or isinstance(meta, bool) or meta <= 0:
-            raise ValueError("A meta deve ser um número inteiro positivo.")
+        if (
+            not isinstance(meta, int)
+            or isinstance(meta, bool)
+            or meta <= 0
+        ):
+            raise ValueError(
+                "A meta deve ser um número inteiro positivo."
+            )
 
         self.__meta_anual = meta
         self.salvar_estante()
 
     def calcular_progresso_meta(self):
-        ano_atual = date.today().year
-
-        livros_concluidos = sum(
-            1 for leitura in self.__leituras
-            if leitura.status == "Lido"
-            and leitura.data_conclusao is not None
-            and date.fromisoformat(leitura.data_conclusao).year == ano_atual
-        )
-
         if self.__meta_anual == 0:
             return 0
 
-        return livros_concluidos / self.__meta_anual * 100
+        ano_atual = date.today().year
 
+        concluidos = sum(
+            1 for leitura in self.__leituras
+            if leitura.status == "Lido"
+            and leitura.data_conclusao
+            and date.fromisoformat(
+                leitura.data_conclusao
+            ).year == ano_atual
+        )
+
+        return concluidos / self.__meta_anual * 100
