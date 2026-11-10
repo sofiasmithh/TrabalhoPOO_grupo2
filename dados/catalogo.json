@@ -1,1 +1,43 @@
-[]
+
+[
+    {
+        "id": 1,
+        "titulo": "Dom Casmurro",
+        "autor": "Machado de Assis",
+        "genero": "Romance",
+        "ano": 1899,
+        "numero_paginas": 256
+    },
+    {
+        "id": 2,
+        "titulo": "O Pequeno Principe",
+        "autor": "Antoine de Saint-Exupery",
+        "genero": "Fantasia",
+        "ano": 1943,
+        "numero_paginas": 96
+    },
+    {
+        "id": 3,
+        "titulo": "Harry Potter e a Pedra Filosofal",
+        "autor": "J. K. Rowling",
+        "genero": "Fantasia",
+        "ano": 1997,
+        "numero_paginas": 264
+    },
+    {
+        "id": 4,
+        "titulo": "A Revolucao dos Bichos",
+        "autor": "George Orwell",
+        "genero": "Ficcao",
+        "ano": 1945,
+        "numero_paginas": 152
+    },
+    {
+        "id": 5,
+        "titulo": "O Hobbit",
+        "autor": "J. R. R. Tolkien",
+        "genero": "Fantasia",
+        "ano": 1937,
+        "numero_paginas": 310
+    }
+]
