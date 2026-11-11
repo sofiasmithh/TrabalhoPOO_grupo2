@@ -1,1 +1,25 @@
-[]
+[
+    {
+        "livro_id": 3,
+        "status": "Abandonado",
+        "favorito": false,
+        "avaliacao": 5,
+        "resenha": "",
+        "tipo": "leitura",
+        "leitor_id": 2
+    },
+    {
+        "livro_id": 1,
+        "status": "Lendo",
+        "favorito": false,
+        "avaliacao": 0,
+        "resenha": "",
+        "tipo": "leitura",
+        "leitor_id": 2
+    },
+    {
+        "tipo": "meta",
+        "leitor_id": 2,
+        "meta_anual": 20
+    }
+]

@@ -75,7 +75,7 @@ class TestLeitura(unittest.TestCase):
   def test_str(self):
       resultado = str(self.leitura)
 
-      self.assertIn("Dom Casmurro", resultado)
+      self.assertIn("O Pequeno Principe", resultado)
       self.assertIn("Lendo", resultado)
       self.assertIn("4/5", resultado)
 
@@ -85,5 +85,5 @@ class TestLeitura(unittest.TestCase):
       resultado = str(leitura)
 
       self.assertIn("[Favorito]", resultado)
-if __name__ == __"main"__:
+if __name__ == "__main__":
     unittest.main()

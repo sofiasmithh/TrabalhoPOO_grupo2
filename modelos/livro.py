@@ -1,3 +1,4 @@
+
 class Livro:
     def __init__(self, id, titulo, autor, genero, ano, numero_paginas=0):
         self.id = id
@@ -19,3 +20,17 @@ class Livro:
             "ano": self.ano,
             "numero_paginas": self.numero_paginas
         }
+
+    def to_dict(self):
+        return self.para_dict()
+
+    @classmethod
+    def from_dict(cls, dados):
+        return cls(
+            dados["id"],
+            dados["titulo"],
+            dados["autor"],
+            dados["genero"],
+            dados["ano"],
+            dados.get("numero_paginas", 0)
+        )

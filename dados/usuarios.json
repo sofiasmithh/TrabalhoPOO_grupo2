@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "id": 1,
+        "tipo": "administrador",
+        "nome": "Administrador",
+        "email": "admin@sistema.com",
+        "senha": "Admin@2026"
+    },
+    {
+        "id": 2,
+        "tipo": "leitor",
+        "nome": "Sofia Smith",
+        "email": "sofiasmith@gmail.com",
+        "senha": "123456"
+    }
+]

@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 
+
 class Usuario(ABC):
-    def _init_(self, id_usuario, nome, email, senha):
+
+    def __init__(self, id_usuario, nome, email, senha):
         self._id = id_usuario
         self._nome = nome.strip()
         self._email = email.strip().casefold()
@@ -26,7 +28,7 @@ class Usuario(ABC):
     def alterar_senha(self, nova_senha):
         if not isinstance(nova_senha, str) or not nova_senha.strip():
             raise ValueError("A senha não pode ficar vazia.")
-        
+
         self._senha = nova_senha
 
     @classmethod
@@ -56,8 +58,8 @@ class Usuario(ABC):
 
     @classmethod
     def autenticar(cls, banco_de_dados, email, senha):
-        from modelos_leitor import Leitor
-        from modelos_administrador import Administrador
+        from modelos.leitor import Leitor
+        from modelos.administrador import Administrador
 
         tipos_usuario = {
             "leitor": Leitor,
@@ -102,6 +104,5 @@ class Usuario(ABC):
             "senha": self._senha
         }
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.nome} ({self.tipo()})"
-

@@ -1,5 +1,6 @@
 import unittest
 import json
+import os
 from pathlib import Path
 
 from modelos.livro import Livro
@@ -9,7 +10,11 @@ from gestores.estante import Estante
 
 class BancoTeste:
     def __init__(self):
-        caminho = Path(__file__).parent / "dados" / "catalogo.json"
+        caminho = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)),
+    "dados",
+    "catalogo.json"
+)
 
         with open(caminho, "r", encoding="utf-8") as arquivo:
             self.livros = json.load(arquivo)

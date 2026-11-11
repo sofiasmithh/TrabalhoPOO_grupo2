@@ -35,7 +35,7 @@ class Estante:
                     registro.get("meta_anual", 0)
                 )
 
-            elif registro.get("tipo") == "leitura":
+            elif registro.get("tipo") == "leitura" or "livro_id" in registro:
                 livro = self.__catalogo.buscar_por_id(
                     int(registro["livro_id"])
                 )

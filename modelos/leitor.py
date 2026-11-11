@@ -1,4 +1,4 @@
-from modelos_usuario import Usuario 
+from modelos.usuario import Usuario
 
 class Leitor(Usuario): 
   def tipo(self):
