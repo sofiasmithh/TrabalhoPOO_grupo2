@@ -4,16 +4,38 @@
         "status": "Abandonado",
         "favorito": false,
         "avaliacao": 5,
-        "resenha": "",
+        "resenha": "Achei a leitura cansativa",
+        "data_conclusao": null,
         "tipo": "leitura",
         "leitor_id": 2
     },
     {
         "livro_id": 1,
         "status": "Lendo",
+        "favorito": true,
+        "avaliacao": 0,
+        "resenha": "",
+        "data_conclusao": null,
+        "tipo": "leitura",
+        "leitor_id": 2
+    },
+    {
+        "livro_id": 2,
+        "status": "Lido",
         "favorito": false,
         "avaliacao": 0,
         "resenha": "",
+        "data_conclusao": "2026-11-11",
+        "tipo": "leitura",
+        "leitor_id": 2
+    },
+    {
+        "livro_id": 5,
+        "status": "Lendo",
+        "favorito": false,
+        "avaliacao": 0,
+        "resenha": "",
+        "data_conclusao": null,
         "tipo": "leitura",
         "leitor_id": 2
     },

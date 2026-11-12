@@ -1,3 +1,4 @@
+
 class Leitura:
     STATUS_VALIDOS = [
         "Lendo",
@@ -6,29 +7,49 @@ class Leitura:
         "Abandonado"
     ]
 
-    def __init__(self, livro, status="Quero ler", favorito=False, avaliacao=0, resenha=""):
-        self.livro = livro              
-        self.status = status           
-        self.favorito = favorito        
-        self.avaliacao = avaliacao      
-        self.resenha = resenha   
+    def __init__(
+        self,
+        livro,
+        status="Quero ler",
+        favorito=False,
+        avaliacao=0,
+        resenha="",
+        data_conclusao=None
+    ):
+        self.livro = livro
+        self.status = status
+        self.favorito = favorito
+        self.avaliacao = avaliacao
+        self.resenha = resenha
+        self.data_conclusao = data_conclusao
 
     @property
     def livro_id(self):
-        return self.livro.id if hasattr(self.livro, "id") else self.livro      
+        return self.livro.id if hasattr(self.livro, "id") else self.livro
 
     def __str__(self):
         fav_texto = " [Favorito]" if self.favorito else ""
-        titulo_livro = self.livro.titulo if hasattr(self.livro, 'titulo') else f"Livro ID {self.livro}"
-        return f"'{titulo_livro}' | Status: {self.status} | Nota: {self.avaliacao}/5{fav_texto}"
+
+        titulo_livro = (
+            self.livro.titulo
+            if hasattr(self.livro, "titulo")
+            else f"Livro ID {self.livro}"
+        )
+
+        return (
+            f"'{titulo_livro}' | "
+            f"Status: {self.status} | "
+            f"Nota: {self.avaliacao}/5{fav_texto}"
+        )
 
     def para_dict(self):
         return {
-            "livro_id": self.livro.id if hasattr(self.livro, 'id') else self.livro,
+            "livro_id": self.livro_id,
             "status": self.status,
             "favorito": self.favorito,
             "avaliacao": self.avaliacao,
-            "resenha": self.resenha
+            "resenha": self.resenha,
+            "data_conclusao": self.data_conclusao
         }
 
     def to_dict(self, leitor_id):
@@ -44,6 +65,6 @@ class Leitura:
             status=dados.get("status", "Quero ler"),
             favorito=dados.get("favorito", False),
             avaliacao=dados.get("avaliacao", 0),
-            resenha=dados.get("resenha", "")
+            resenha=dados.get("resenha", ""),
+            data_conclusao=dados.get("data_conclusao")
         )
-    

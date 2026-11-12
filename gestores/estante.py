@@ -64,6 +64,7 @@ class Estante:
 
         self.__banco.salvar_leituras(dados)
 
+    
     def adicionar_leitura(self, livro_id, status="Quero ler"):
         if status not in self.STATUS_VALIDOS:
             raise ValueError("Status inválido.")
@@ -77,7 +78,14 @@ class Estante:
             if leitura.livro_id == livro_id:
                 raise ValueError("Livro já está na estante.")
 
-        leitura = Leitura(livro, status)
+        data_conclusao = date.today().isoformat() if status == "Lido" else None
+
+        leitura = Leitura(
+            livro,
+            status,
+            data_conclusao=data_conclusao
+        )
+
         self.__leituras.append(leitura)
         self.salvar_estante()
 
@@ -175,3 +183,18 @@ class Estante:
         )
 
         return concluidos / self.__meta_anual * 100
+
+    
+    def adicionar_resenha(self, livro_id, resenha):
+        leitura = self.buscar_leitura(livro_id)
+
+        if not isinstance(resenha, str) or not resenha.strip():
+            raise ValueError("A resenha não pode ficar vazia.")
+
+        leitura.resenha = resenha.strip()
+        self.salvar_estante()
+
+    def consultar_resenha(self, livro_id):
+        leitura = self.buscar_leitura(livro_id)
+        return leitura.resenha
+

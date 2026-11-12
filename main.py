@@ -1,3 +1,4 @@
+
 from gestores.catalogo import Catalogo
 from gestores.estante import Estante
 from modelos.administrador import Administrador
@@ -152,7 +153,10 @@ def menu_administrador(admin, catalogo):
 
         elif opcao == "2":
             try:
-                id_livro = int(input("ID do livro que deseja remover: "))
+                id_livro = int(
+                    input("ID do livro que deseja remover: ")
+                )
+
                 catalogo.remover_livro(id_livro, admin)
                 print("Livro removido com sucesso!")
 
@@ -161,7 +165,9 @@ def menu_administrador(admin, catalogo):
 
         elif opcao == "3":
             try:
-                id_livro = int(input("ID do livro que deseja editar: "))
+                id_livro = int(
+                    input("ID do livro que deseja editar: ")
+                )
 
                 titulo = input("Novo título: ").strip()
                 autor = input("Novo autor: ").strip()
@@ -211,6 +217,7 @@ def menu_administrador(admin, catalogo):
         else:
             print("Opção inválida.")
 
+
 def menu_leitor(leitor, catalogo):
     estante = Estante(
         leitor_id=leitor.id,
@@ -239,8 +246,15 @@ def menu_leitor(leitor, catalogo):
                 print("Sua estante está vazia.")
             else:
                 for leitura in leituras:
-                    livro = catalogo.buscar_por_id(leitura.livro_id)
-                    titulo = livro.titulo if livro else "Livro desconhecido"
+                    livro = catalogo.buscar_por_id(
+                        leitura.livro_id
+                    )
+
+                    titulo = (
+                        livro.titulo
+                        if livro
+                        else "Livro desconhecido"
+                    )
 
                     print(
                         f"ID: {leitura.livro_id} | "
@@ -251,7 +265,10 @@ def menu_leitor(leitor, catalogo):
 
         elif opcao == "3":
             try:
-                livro_id = int(input("ID do livro que deseja adicionar: "))
+                livro_id = int(
+                    input("ID do livro que deseja adicionar: ")
+                )
+
                 status = input(
                     "Status (Quero ler, Lendo, Lido ou Abandonado): "
                 ).strip()
@@ -264,7 +281,10 @@ def menu_leitor(leitor, catalogo):
 
         elif opcao == "4":
             try:
-                livro_id = int(input("ID do livro que deseja remover: "))
+                livro_id = int(
+                    input("ID do livro que deseja remover: ")
+                )
+
                 estante.remover_leitura(livro_id)
                 print("Livro removido da estante!")
 
@@ -274,6 +294,7 @@ def menu_leitor(leitor, catalogo):
         elif opcao == "5":
             try:
                 livro_id = int(input("ID do livro: "))
+
                 status = input(
                     "Novo status (Quero ler, Lendo, Lido ou Abandonado): "
                 ).strip()
@@ -295,12 +316,17 @@ def menu_leitor(leitor, catalogo):
 
                 if escolha == "1":
                     nota = int(input("Nota de 1 a 5: "))
+
                     estante.avaliar_livro(livro_id, nota)
                     print("Avaliação registrada!")
 
                 elif escolha == "2":
-                    estante.alternar_favorito(livro_id)
-                    print("Favorito atualizado!")
+                    favorito = estante.alternar_favorito(livro_id)
+
+                    if favorito:
+                        print("Livro adicionado aos favoritos!")
+                    else:
+                        print("Livro removido dos favoritos!")
 
                 else:
                     print("Opção inválida.")
@@ -313,6 +339,7 @@ def menu_leitor(leitor, catalogo):
                 meta = int(
                     input("Quantos livros deseja ler este ano? ")
                 )
+
                 estante.definir_meta_anual(meta)
                 print("Meta anual definida!")
 
@@ -328,12 +355,44 @@ def menu_leitor(leitor, catalogo):
                 print(f"Erro: {erro}")
 
         elif opcao == "9":
+            print("\n1 - Escrever resenha")
+            print("2 - Consultar resenha")
+
+            escolha = input("Escolha uma opção: ").strip()
+
+            try:
+                livro_id = int(input("ID do livro: "))
+
+                if escolha == "1":
+                    resenha = input("Escreva sua resenha: ").strip()
+
+                    estante.adicionar_resenha(
+                        livro_id,
+                        resenha
+                    )
+
+                    print("Resenha salva com sucesso!")
+
+                elif escolha == "2":
+                    resenha = estante.consultar_resenha(livro_id)
+
+                    if resenha:
+                        print(f"\nResenha: {resenha}")
+                    else:
+                        print("Esse livro ainda não possui resenha.")
+
+                else:
+                    print("Opção inválida.")
+
+            except (ValueError, TypeError) as erro:
+                print(f"Erro: {erro}")
+
+        elif opcao == "10":
             print("Saindo da conta de leitor...")
             break
 
         else:
             print("Opção inválida. Tente novamente.")
-
 
 
 def main():

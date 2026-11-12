@@ -14,4 +14,5 @@ class Leitor(Usuario):
     print("6 - Avaliar ou favoritar livro")
     print("7 - Definir meta anual")
     print("8 - Consultar progresso da meta")
-    print("9 - Sair")
+    print("9 - Escrever ou consultar resenha")
+    print("10 - Sair")
